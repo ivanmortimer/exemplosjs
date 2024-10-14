@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.7.16/dist/vue.min.js" integrity="sha256-PB1LDFSejenUqbr7EqtwtqGsdH0HKTuYxbJbZjKZmv0=" crossorigin="anonymous"></script>    <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <style>
+        #p_referencia_reqres {
+            color: white;
+        }
+        #a_referencia_reqres {
+            color: white;
+        }
+    </style>
+</head>
+<body class="container bg-warning">
+    <div class="row justify-content-start ms-sm-auto">
+        <h1 class="col-auto">Usuários de Teste via REST</h1>
+        <p class="col-auto" id="p_referencia_reqres"><em>Os usuários deste exemplo são fornecidos pela API de testes <a href="https://reqres.in/api/users?per_page=10" target="_blank" id="a_referencia_reqres">reqres.in</a></em></p>
+    </div>
+    <div class="container-fluid" id="usuarios">
+        <div class="row justify-content-center">
+            <div class="card col-sm-3 p-2 m-3" v-for="(user, index) in users" :key="index">
+                <img :src="user.avatar" class="card-img-top" alt="Avatar do usuário">
+                <div class="card-body">
+                  <h5 class="card-title">{{ user.first_name }} {{ user.last_name }}</h5>
+                  <p class="card-text">{{ user.email }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        // Definindo o objeto Vue
+        var app = new Vue({
+            el: '#usuarios',  // a) Configuração do elemento alvo
+            data: function() {
+                return {
+                    users: []  // c) Vetor users inicialmente vazio
+                };
+            },
+            mounted() {
+                // d) Evento mounted chamando a função loadUsers
+                this.loadUsers();
+            },
+            methods: {
+                // e) Definir a função loadUsers dentro de methods
+                loadUsers: function() {
+                    // f) Implementar o fetch para obter os dados da API
+                    fetch('https://reqres.in/api/users?per_page=10')
+                        .then(response => response.json())
+                        .then(data => {
+                            this.users = data.data;  // Preenche o vetor users com os dados da API
+                        })
+                        .catch(error => console.error('Erro ao carregar usuários:', error));
+                }
+            }
+        });
+    </script>
+</body>
+</html>
